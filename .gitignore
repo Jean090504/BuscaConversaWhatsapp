@@ -1,0 +1,10 @@
+node_modules
+dist
+coverage
+*.log
+*.env
+.DS_Store
+# Optional: Ignore IDE-specific files
+.idea/
+.vscode/
+
