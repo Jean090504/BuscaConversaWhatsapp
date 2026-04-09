@@ -27,7 +27,7 @@ app.use(helmet())
 
 // --- IMPORTAÇÃO DAS ROTAS ---
 
-const buscaConversaRotas = require('../routes/buscaConversaRotas.js') 
+const buscaConversaRotas = require('./routes/buscaConversaRotas.js') 
 
 app.use('/v1/whatsapp', buscaConversaRotas)
 

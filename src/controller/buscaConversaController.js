@@ -6,7 +6,7 @@
  ********************************************************************************************************************************************/
 
 //Import do arquivo
-const { contatos } = require("../model/contatos.js")
+const { contatos } = require("../../model/contatos.js")
 const bancoDeDados = contatos
 
 const listarTodosDados = () => {
@@ -144,7 +144,7 @@ const mensagemDiretaContatoUsuario = (numeroUsuario, nomeContato) => {
     const usuarioDono = bancoDeDados["whats-users"].find(item => item.number === numeroUsuario)
 
     if (usuarioDono) {
-        const contatoAlvo = usuarioDono.contacts.find(itemContato => itemContato.name === nomeContato)
+    const contatoAlvo = usuarioDono.contacts.find(itemContato => itemContato.name.toLowerCase() === nomeContato.toLowerCase())
 
         if (contatoAlvo) {
             status = true
