@@ -67,7 +67,6 @@ function renderizarTabela(usuarios) {
     });
 }
 
-// Função para abrir detalhes sem quebrar o layout
 async function verDetalhesUsuario(numero) {
     const viewTabela = document.getElementById('view-tabela');
     const containerDetalhes = document.getElementById('detalhes-container');
@@ -96,21 +95,17 @@ async function verDetalhesUsuario(numero) {
     }
 }
 
-// --- 5. BUSCA POR PALAVRA-CHAVE (ENDPOINT 19) ---
-const inputBusca = document.getElementById('input-busca-global');
 inputBusca?.addEventListener('keypress', async (e) => {
     if (e.key === 'Enter') {
         const termo = inputBusca.value;
-        const container = document.getElementById('detalhes-container');
-        container.classList.remove('hidden');
-        
         try {
             const res = await fetch(`${API_BASE_URL}/usuario/busca?busca=${termo}`);
             const result = await res.json();
             
-            if (result.status) {
-                renderizarMensagensBusca(result.dadosBusca.resultados);
-                document.getElementById('user-detail-name').textContent = `Resultados para: "${termo}"`;
+            if (result.status && result.dadosBusca) {
+                // Passa o array de resultados (que usa campos como 'mensagem' e 'contato')
+                renderizarMensagens(result.dadosBusca.resultados);
+                document.getElementById('user-detail-name').textContent = `Resultados: "${termo}"`;
             }
         } catch (error) {
             console.error("Erro na busca:", error);
@@ -118,7 +113,7 @@ inputBusca?.addEventListener('keypress', async (e) => {
     }
 });
 
-// --- 6. FILTRO DE CONVERSA DIRETA (ENDPOINT 15) ---
+
 async function carregarConversaDireta(numeroUsuario, nomeContato) {
     const statusTxt = document.getElementById('status-conversa');
     if (statusTxt) statusTxt.textContent = `Filtrando conversa com: ${nomeContato}`;
@@ -189,30 +184,38 @@ function renderizarMensagens(mensagens) {
 
     mensagens.forEach(m => {
         const msgDiv = document.createElement('div');
-        msgDiv.className = "p-4 rounded-xl border-l-4 transition-all hover:bg-slate-800/40 " + 
-                          (m.remetente === "me" ? "border-indigo-500 bg-indigo-500/5" : "border-slate-600 bg-slate-800/20");
+        
+        // Verifica se é o formato da busca ou o formato da conversa direta
+        const remetente = m.remetente || m.usuarioDono || "SISTEMA";
+        const destino = m.contato || m.nomeContato || "";
+        const texto = m.mensagem || m.mensagensTrocadas || "Conteúdo indisponível";
+        const horario = m.horarioEnvio || m.horarioDoEnvio || "--:--";
+
+        msgDiv.className = "p-4 rounded-xl border-l-4 transition-all hover:bg-slate-800/40 mb-4 " + 
+                          (remetente === "me" || m.remetente === m.usuarioDono ? "border-indigo-500 bg-indigo-500/5" : "border-slate-600 bg-slate-800/20");
         
         const meta = document.createElement('div');
         meta.className = "flex justify-between items-center mb-2 opacity-60 uppercase font-bold text-[9px] tracking-widest";
         
-        const sender = document.createElement('span');
-        // Use textContent para segurança contra XSS
-        sender.textContent = `DE: ${m.remetente || 'SISTEMA'}`; 
+        const senderInfo = document.createElement('span');
+        senderInfo.textContent = `DE: ${remetente} PARA: ${destino}`; 
 
         const time = document.createElement('span');
-        time.textContent = m.horarioDoEnvio || m.horarioEnvio || '--:--';
+        time.className = "mono";
+        time.textContent = horario;
 
         const content = document.createElement('p');
         content.className = "text-slate-200 text-sm leading-relaxed";
-        content.textContent = m.mensagensTrocadas || m.mensagem || "Erro ao carregar conteúdo.";
+        content.textContent = texto;
 
-        meta.appendChild(sender);
+        meta.appendChild(senderInfo);
         meta.appendChild(time);
         msgDiv.appendChild(meta);
         msgDiv.appendChild(content);
         log.appendChild(msgDiv);
     });
 }
+
 function renderizarMensagensBusca(resultados) {
     const log = document.getElementById('log-mensagens');
     log.textContent = ""; 
