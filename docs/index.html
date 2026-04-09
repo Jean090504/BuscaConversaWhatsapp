@@ -3,195 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TERMINAL // DATA INSIGHT</title>
+    <title>SISTEMA // DASHBOARD OPERACIONAL</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@300;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
-        :root {
-            --neon-purple: #a855f7;
-            --neon-blue: #3b82f6;
-            --dark-bg: #020617;
-        }
-
         body {
-            font-family: 'Space Grotesk', sans-serif;
-            background-color: var(--dark-bg);
-            background-image: radial-gradient(circle at 50% 50%, #1e1b4b 0%, #020617 100%);
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Slate 50 */
+            color: #1e293b; /* Slate 800 */
         }
 
-        .mono { font-family: 'JetBrains Mono', monospace; }
-
-        /* Custom Scrollbar Cyberpunk */
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #0f172a; }
+        /* Scrollbar Suave e Moderna */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
         .custom-scrollbar::-webkit-scrollbar-thumb { 
-            background: linear-gradient(to bottom, var(--neon-purple), var(--neon-blue));
+            background: #cbd5e1;
             border-radius: 10px;
         }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-        /* Efeito de Vidro (Glassmorphism) */
-        .glass {
-            background: rgba(30, 41, 59, 0.5);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+        /* Card Soft Shadow */
+        .card-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
         }
 
-        .neo-border {
-            box-shadow: 0 0 15px rgba(168, 85, 247, 0.1);
-            transition: all 0.3s ease;
-        }
-        .neo-border:hover {
-            box-shadow: 0 0 25px rgba(168, 85, 247, 0.3);
-            border-color: var(--neon-purple);
+        .active-nav {
+            background-color: #eff6ff;
+            color: #2563eb;
+            border-right: 3px solid #2563eb;
         }
     </style>
 </head>
-<body class="text-slate-300 h-screen flex overflow-hidden">
+<body class="h-screen flex overflow-hidden">
 
-    <aside class="w-20 lg:w-72 bg-slate-950/80 border-r border-white/5 flex flex-col transition-all duration-500 group">
-        <div class="p-6 border-b border-white/5 flex items-center gap-4 overflow-hidden">
-            <div class="bg-gradient-to-tr from-purple-600 to-blue-500 p-2.5 rounded-xl shadow-lg shadow-purple-500/20 shrink-0">
-                <i class="fas fa-microchip text-white text-xl"></i>
+    <aside class="w-64 bg-white border-r border-slate-200 flex flex-col z-50">
+        <div class="p-6 flex items-center gap-3">
+            <div class="bg-indigo-600 p-2 rounded-lg text-white">
+                <i class="fas fa-layer-group text-lg"></i>
             </div>
-            <span class="font-bold text-white tracking-tighter text-xl hidden lg:block uppercase italic">Core_Integrator</span>
+            <span class="font-bold text-slate-800 tracking-tight text-lg">InsightCenter</span>
         </div>
 
-        <nav class="flex-1 p-4 space-y-4">
-            <div class="hidden lg:block text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] px-2 mb-2">Sistemas_Ativos</div>
-            <a href="#" class="flex items-center gap-4 p-3 bg-purple-500/10 text-purple-400 rounded-xl border border-purple-500/20 transition-all neo-border">
-                <i class="fas fa-terminal w-5 text-center"></i>
-                <span class="text-sm font-bold hidden lg:block">Console de Logs</span>
+        <nav class="flex-1 px-4 mt-4 space-y-1">
+            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest px-3 mb-2">Menu Principal</p>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 active-nav rounded-lg font-medium text-sm transition-all">
+                <i class="fas fa-chart-pie w-5"></i> Dashboard
             </a>
-            <a href="#" class="flex items-center gap-4 p-3 hover:bg-white/5 rounded-xl transition-all group/item">
-                <i class="fas fa-project-diagram w-5 text-center text-slate-500 group-hover/item:text-blue-400"></i>
-                <span class="text-sm font-medium hidden lg:block">Fluxo de Dados</span>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:bg-slate-50 rounded-lg font-medium text-sm transition-all">
+                <i class="fas fa-users w-5"></i> Usuários
+            </a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-slate-500 hover:bg-slate-50 rounded-lg font-medium text-sm transition-all">
+                <i class="fas fa-comment-dots w-5"></i> Mensagens
             </a>
         </nav>
 
-        <div class="p-4 border-t border-white/5">
-            <div class="flex items-center gap-4 p-3 glass rounded-2xl">
-                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-slate-700 to-slate-900 border border-white/10 flex items-center justify-center text-xs font-bold text-white shadow-inner shrink-0">JC</div>
-                <div class="hidden lg:block overflow-hidden">
-                    <p class="text-white text-xs font-bold truncate">Jean Costa</p>
-                    <p class="text-[10px] text-purple-500 uppercase font-black tracking-widest">Root_Admin</p>
+        <div class="p-6 border-t border-slate-100">
+            <div class="flex items-center gap-3 p-2 rounded-xl bg-slate-50">
+                <div class="w-9 h-9 rounded-full bg-indigo-100 border border-indigo-200 flex items-center justify-center text-xs font-bold text-indigo-700">JC</div>
+                <div class="overflow-hidden">
+                    <p class="text-slate-900 text-xs font-bold truncate">Jean Costa</p>
+                    <p class="text-[10px] text-slate-500 font-medium">Administrador</p>
                 </div>
             </div>
         </div>
     </aside>
 
-    <main class="flex-1 flex flex-col overflow-hidden relative">
+    <main class="flex-1 flex flex-col overflow-hidden">
         
-        <header class="h-20 glass border-b border-white/5 flex items-center justify-between px-8 shrink-0 z-50">
-            <div>
-                <h2 class="text-white font-bold text-lg tracking-tight flex items-center gap-2">
-                    <span class="w-2 h-2 bg-purple-500 rounded-full animate-ping"></span>
-                    Monitoramento em Tempo Real
-                </h2>
-                <p class="text-[10px] text-slate-500 mono uppercase tracking-widest mt-0.5">> status: system_online // node: render_server</p>
+        <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8 shrink-0">
+            <div class="flex items-center gap-4">
+                <h2 class="text-slate-800 font-semibold text-base">Monitoramento de Contatos</h2>
+                <span class="px-2 py-0.5 bg-green-100 text-green-700 text-[10px] font-bold rounded-md uppercase tracking-wide">Servidor Online</span>
             </div>
             
-            <div class="flex items-center gap-8">
-                <div class="relative hidden xl:block group">
-                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-purple-500 transition-colors text-xs"></i>
-                    <input type="text" id="input-busca-global" placeholder="FILTRAR_LOGS..." 
-                        class="bg-slate-950 border border-white/5 rounded-full pl-10 pr-6 py-2 text-xs text-white focus:outline-none focus:border-purple-500/50 transition-all w-80 mono">
-                </div>
-                <div class="flex gap-2">
-                    <div class="w-3 h-3 bg-red-500/20 border border-red-500/50 rounded-full"></div>
-                    <div class="w-3 h-3 bg-yellow-500/20 border border-yellow-500/50 rounded-full"></div>
-                    <div class="w-3 h-3 bg-green-500/20 border border-green-500/50 rounded-full"></div>
+            <div class="flex items-center gap-4">
+                <div class="relative group">
+                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                    <input type="text" id="input-busca-global" placeholder="Pesquisar conversas..." 
+                        class="bg-slate-50 border border-slate-200 rounded-lg pl-9 pr-4 py-1.5 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all w-64">
                 </div>
             </div>
         </header>
 
-        <div class="flex-1 overflow-hidden relative">
+        <div class="flex-1 overflow-hidden relative p-8">
             
-            <div id="view-tabela" class="h-full overflow-y-auto p-6 lg:p-10 space-y-10">
+            <div id="view-tabela" class="h-full overflow-y-auto space-y-8 animate__animated animate__fadeIn">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="glass p-6 rounded-3xl neo-border group relative overflow-hidden">
-                        <div class="absolute -right-4 -bottom-4 text-purple-500/10 text-7xl rotate-12 transition-transform group-hover:scale-110">
-                            <i class="fas fa-users"></i>
+                    <div class="bg-white p-6 rounded-2xl card-shadow flex items-center gap-5">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                            <i class="fas fa-address-book text-xl"></i>
                         </div>
-                        <p class="text-slate-500 text-[10px] uppercase font-black tracking-[0.2em] mb-1">Total_Records</p>
-                        <h3 id="total-contatos" class="text-4xl font-black text-white italic">--</h3>
-                        <div class="mt-4 h-1 w-full bg-slate-800 rounded-full overflow-hidden">
-                            <div class="h-full bg-gradient-to-r from-purple-500 to-blue-500 w-2/3"></div>
+                        <div>
+                            <p class="text-slate-500 text-xs font-medium uppercase tracking-wider">Total de Registros</p>
+                            <h3 id="total-contatos" class="text-2xl font-bold text-slate-800">--</h3>
                         </div>
                     </div>
-                    <div class="glass p-6 rounded-3xl neo-border">
-                        <p class="text-slate-500 text-[10px] uppercase font-black tracking-[0.2em] mb-1">Latency_Check</p>
-                        <h3 class="text-4xl font-black text-green-500 italic">24ms</h3>
-                        <p class="text-[10px] text-green-500/50 mt-2 uppercase font-bold">Protocolo Seguro Ativo</p>
                     </div>
-                    <div class="glass p-6 rounded-3xl neo-border">
-                        <p class="text-slate-500 text-[10px] uppercase font-black tracking-[0.2em] mb-1">System_Uptime</p>
-                        <h3 class="text-4xl font-black text-blue-400 italic">99.9%</h3>
-                        <p class="text-[10px] text-blue-500/50 mt-2 uppercase font-bold">Stable_Build v2.4</p>
-                    </div>
-                </div>
 
-                <div class="glass rounded-[2rem] overflow-hidden neo-border">
-                    <div class="p-6 border-b border-white/5 flex justify-between items-center bg-white/5">
-                        <h4 class="text-xs font-black uppercase tracking-[0.3em] text-white">Base_de_Dados_Usuários</h4>
-                        <span class="text-[10px] mono text-slate-500 italic">Total filtrado: 100%</span>
+                <div class="bg-white rounded-2xl card-shadow overflow-hidden">
+                    <div class="p-5 border-b border-slate-100 flex justify-between items-center">
+                        <h4 class="text-sm font-bold text-slate-800">Lista de Operadores</h4>
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="text-slate-500 text-[10px] uppercase tracking-widest border-b border-white/5">
-                                    <th class="px-8 py-5 font-black">Operador_ID</th>
-                                    <th class="px-8 py-5 font-black">Status_Bio</th>
-                                    <th class="px-8 py-5 font-black text-right">Ação</th>
+                        <table class="w-full text-left">
+                            <thead class="bg-slate-50 text-slate-500 text-[11px] font-bold uppercase tracking-wider border-b border-slate-100">
+                                <tr>
+                                    <th class="px-6 py-4">Usuário</th>
+                                    <th class="px-6 py-4">Bio / Descrição</th>
+                                    <th class="px-6 py-4 text-right">Ação</th>
                                 </tr>
                             </thead>
-                            <tbody id="corpo-tabela" class="divide-y divide-white/5 text-sm mono">
+                            <tbody id="corpo-tabela" class="divide-y divide-slate-100 text-sm">
                                 </tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <div id="detalhes-container" class="hidden absolute inset-0 bg-slate-950/90 backdrop-blur-2xl z-50 p-6 lg:p-10 flex flex-col space-y-6 animate__animated animate__fadeInUp">
+            <div id="detalhes-container" class="hidden absolute inset-0 bg-slate-50/95 backdrop-blur-sm z-50 p-8 flex flex-col space-y-6 animate__animated animate__slideInUp">
                 
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white/5 p-6 rounded-[2rem] border border-white/10 shadow-2xl">
-                    <div class="flex items-center gap-5">
-                        <div id="user-avatar-current" class="w-16 h-16 rounded-2xl border-2 border-purple-500 p-1 bg-slate-900 shadow-lg shadow-purple-500/20">
-                            </div>
-                        <div>
-                            <h3 id="user-detail-name" class="text-2xl font-black text-white tracking-tighter uppercase italic leading-none">Indefinido</h3>
-                            <div class="flex items-center gap-3 mt-2">
-                                <span id="user-detail-number" class="text-[10px] bg-white/10 text-slate-300 px-3 py-1 rounded-full border border-white/10 mono tracking-tighter">--</span>
-                                <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
-                                <span class="text-[10px] font-bold text-green-500 uppercase tracking-widest">Ativo</span>
-                            </div>
+                <div class="flex justify-between items-center bg-white p-6 rounded-2xl card-shadow">
+                    <div class="flex items-center gap-4">
+                        <div class="bg-slate-100 px-4 py-2 rounded-xl border border-slate-200">
+                            <h3 id="user-detail-name" class="text-lg font-bold text-slate-800 leading-none">Indefinido</h3>
+                            <p id="user-detail-number" class="text-[10px] text-slate-500 font-mono mt-1">--</p>
                         </div>
                     </div>
-                    <button onclick="fecharDetalhes()" class="px-6 py-3 glass hover:bg-red-500/20 hover:text-red-500 text-slate-300 rounded-2xl transition-all text-[10px] font-black uppercase tracking-[0.2em] border border-white/10 group">
-                        <i class="fas fa-power-off mr-2 group-hover:rotate-12 transition-transform"></i> Encerrar Consulta
+                    <button onclick="fecharDetalhes()" class="px-4 py-2 bg-white hover:bg-slate-50 text-slate-600 border border-slate-200 rounded-lg text-xs font-bold transition-all flex items-center gap-2 shadow-sm">
+                        <i class="fas fa-times"></i> Fechar Detalhes
                     </button>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 min-h-0">
-                    <div class="lg:col-span-4 glass rounded-[2.5rem] p-8 flex flex-col min-h-0 border border-white/5">
-                        <div class="flex items-center justify-between mb-6">
-                            <h4 class="text-purple-400 text-[10px] font-black uppercase tracking-[0.4em]">Linked_Contacts</h4>
-                            <div class="w-8 h-1 bg-purple-500/30 rounded-full"></div>
-                        </div>
-                        <ul id="lista-contatos-detalhe" class="flex-1 overflow-y-auto space-y-3 pr-2 custom-scrollbar"></ul>
+                    <div class="lg:col-span-4 bg-white rounded-2xl p-6 flex flex-col min-h-0 card-shadow">
+                        <h4 class="text-slate-400 text-[11px] font-bold uppercase tracking-widest mb-4">Contatos Vinculados</h4>
+                        <ul id="lista-contatos-detalhe" class="flex-1 overflow-y-auto space-y-2 pr-2 custom-scrollbar"></ul>
                     </div>
 
-                    <div class="lg:col-span-8 glass rounded-[2.5rem] p-8 flex flex-col min-h-0 border border-white/5">
-                        <div class="flex justify-between items-center mb-6">
-                            <h4 class="text-blue-400 text-[10px] font-black uppercase tracking-[0.4em]">Message_Buffer_Logs</h4>
-                            <div class="flex gap-2 items-center">
-                                <span id="status-conversa" class="text-[9px] text-slate-500 italic uppercase tracking-widest">Ready_to_fetch</span>
-                                <i class="fas fa-circle text-[6px] text-blue-500 animate-pulse"></i>
-                            </div>
+                    <div class="lg:col-span-8 bg-white rounded-2xl p-6 flex flex-col min-h-0 card-shadow">
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="text-slate-400 text-[11px] font-bold uppercase tracking-widest">Logs de Conversa</h4>
+                            <span id="status-conversa" class="text-[10px] text-indigo-500 font-bold bg-indigo-50 px-2 py-1 rounded-md">Pronto</span>
                         </div>
-                        <div id="log-mensagens" class="flex-1 overflow-y-auto space-y-4 pr-3 custom-scrollbar scroll-smooth bg-black/40 rounded-3xl p-6 border border-white/5 shadow-inner">
+                        <div id="log-mensagens" class="flex-1 overflow-y-auto space-y-4 pr-3 custom-scrollbar bg-slate-50 rounded-xl p-4 border border-slate-100">
                             </div>
                     </div>
                 </div>

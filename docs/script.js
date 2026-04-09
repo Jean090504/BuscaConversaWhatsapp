@@ -33,15 +33,14 @@ function renderizarTabela(usuarios) {
 
     usuarios.forEach(user => {
         const tr = document.createElement('tr');
-        tr.className = "hover:bg-slate-800/50 transition border-b border-slate-700/50";
+        tr.className = "hover:bg-slate-50 transition-colors"; // Fundo claro no hover
 
         const tdUser = document.createElement('td');
-        tdUser.className = "px-6 py-4 flex items-center gap-3 text-white";
+        tdUser.className = "px-6 py-4 flex items-center gap-3 text-slate-800 font-medium";
         
         const img = document.createElement('img');
-        // Usamos profile-image conforme sua API
         img.src = user["profile-image"]; 
-        img.className = "w-8 h-8 rounded-full bg-slate-700 border border-slate-600 object-cover";
+        img.className = "w-9 h-9 rounded-full bg-slate-200 border border-slate-200 object-cover";
         
         const spanName = document.createElement('span');
         spanName.textContent = user.nickname;
@@ -50,14 +49,14 @@ function renderizarTabela(usuarios) {
         tdUser.appendChild(spanName);
 
         const tdBio = document.createElement('td');
-        tdBio.className = "px-6 py-4 italic text-slate-400";
-        tdBio.textContent = user.background || "Sem descrição.";
+        tdBio.className = "px-6 py-4 text-slate-500 text-xs italic";
+        tdBio.textContent = user.background || "Nenhuma descrição disponível.";
 
         const tdAction = document.createElement('td');
-        tdAction.className = "px-6 py-4";
+        tdAction.className = "px-6 py-4 text-right";
         const btn = document.createElement('button');
-        btn.className = "text-indigo-400 hover:text-indigo-300 font-medium transition-colors";
-        btn.textContent = "Ver Detalhes";
+        btn.className = "px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white rounded-lg text-xs font-bold transition-all";
+        btn.textContent = "Detalhes";
         btn.onclick = () => verDetalhesUsuario(user.number);
 
         tdAction.appendChild(btn);
@@ -136,27 +135,35 @@ async function carregarConversaDireta(numeroUsuario, nomeContato) {
     }
 }
 
-// Atualize sua função renderizarContatos para tornar os itens clicáveis
 function renderizarContatos(contatos, numeroDono) {
     const lista = document.getElementById('lista-contatos-detalhe');
     lista.textContent = ""; 
 
     contatos.forEach(c => {
         const li = document.createElement('li');
-        // Cursor pointer e hover para indicar que é clicável
-        li.className = "flex items-center gap-3 p-3 bg-slate-800/30 rounded-lg border border-slate-700/50 mb-2 cursor-pointer hover:bg-indigo-500/10 hover:border-indigo-500/50 transition-all group";
-        
-        // Ao clicar, puxa a conversa direta (Endpoint 15)
+        li.className = "flex items-center gap-3 p-3 bg-white hover:bg-indigo-50 rounded-xl border border-slate-100 cursor-pointer transition-all group";
         li.onclick = () => carregarConversaDireta(numeroDono, c.nomeContato);
 
-        li.innerHTML = `
-            <img src="${c.imagemContato}" class="w-10 h-10 rounded-full object-cover border border-slate-600 group-hover:border-indigo-500 transition-all">
-            <div class="flex-1">
-                <p class="text-xs text-white font-bold group-hover:text-indigo-400 transition-all">${c.nomeContato}</p>
-                <p class="text-[10px] text-slate-500 leading-tight truncate w-32">${c.bioContato}</p>
-            </div>
-            <i class="fas fa-chevron-right text-[10px] text-slate-700 group-hover:text-indigo-500 transition-all"></i>
-        `;
+        const img = document.createElement('img');
+        img.src = c.imagemContato;
+        img.className = "w-10 h-10 rounded-lg object-cover border border-slate-200";
+        
+        const textContainer = document.createElement('div');
+        textContainer.className = "flex-1 overflow-hidden";
+
+        const nome = document.createElement('p');
+        nome.className = "text-[12px] text-slate-800 font-bold truncate";
+        nome.textContent = c.nomeContato;
+
+        const bio = document.createElement('p');
+        bio.className = "text-[10px] text-slate-400 truncate";
+        bio.textContent = c.bioContato;
+
+        textContainer.appendChild(nome);
+        textContainer.appendChild(bio);
+
+        li.appendChild(img);
+        li.appendChild(textContainer);
         lista.appendChild(li);
     });
 }
@@ -182,28 +189,76 @@ function renderizarMensagens(mensagens) {
 
     mensagens.forEach(m => {
         const msgDiv = document.createElement('div');
-        msgDiv.className = "p-4 rounded-xl border-l-4 transition-all hover:bg-slate-800/40 " + 
-                          (m.remetente === m.usuario ? "border-indigo-500 bg-indigo-500/5" : "border-slate-600 bg-slate-800/20");
+        const souEu = m.remetente === m.usuario;
+        
+        // Estilo de balão de chat moderno
+        msgDiv.className = "max-w-[85%] p-3 rounded-2xl shadow-sm text-sm " + 
+                          (souEu ? "bg-indigo-600 text-white ml-auto rounded-tr-none" : "bg-white text-slate-700 mr-auto rounded-tl-none border border-slate-200");
         
         const meta = document.createElement('div');
-        meta.className = "flex justify-between items-center mb-2 opacity-60 uppercase font-bold text-[9px] tracking-widest";
+        meta.className = "flex justify-between items-center mb-1 text-[9px] font-bold uppercase tracking-wider opacity-70";
         
         const sender = document.createElement('span');
-        sender.className = m.remetente === m.usuario ? "text-indigo-400" : "text-slate-400";
         sender.textContent = m.remetente;
 
         const time = document.createElement('span');
-        time.className = "mono";
         time.textContent = m.horarioDoEnvio;
-
-        const content = document.createElement('p');
-        content.className = "text-slate-200 text-sm leading-relaxed";
-        content.textContent = m.mensagensTrocadas;
 
         meta.appendChild(sender);
         meta.appendChild(time);
+
+        const content = document.createElement('p');
+        content.className = "leading-relaxed";
+        content.textContent = m.mensagensTrocadas;
+
         msgDiv.appendChild(meta);
         msgDiv.appendChild(content);
+        log.appendChild(msgDiv);
+    });
+}
+
+function renderizarMensagensBusca(resultados) {
+    const log = document.getElementById('log-mensagens');
+    log.textContent = ""; 
+
+    if (!resultados || resultados.length === 0) {
+        const mensagemErro = document.createElement('p');
+        mensagemErro.className = "p-4 text-slate-500 italic text-center";
+        mensagemErro.textContent = "Nenhuma mensagem encontrada para este termo.";
+        log.appendChild(mensagemErro);
+        return;
+    }
+
+    resultados.forEach(res => {
+        // 1. Criar o container principal da mensagem
+        const msgDiv = document.createElement('div');
+        msgDiv.className = "p-4 rounded-xl border-l-4 border-emerald-500 bg-emerald-500/5 mb-3 transition-all hover:bg-slate-800/40";
+        
+        // 2. Criar o cabeçalho (Meta info)
+        const metaDiv = document.createElement('div');
+        metaDiv.className = "flex justify-between items-center mb-2 opacity-60 uppercase font-bold text-[9px] tracking-widest";
+        
+        const infoUsuarios = document.createElement('span');
+        infoUsuarios.className = "text-emerald-400";
+        infoUsuarios.textContent = `De: ${res.usuarioRemetente} para ${res.usuarioDestinatario}`;
+        
+        const infoData = document.createElement('span');
+        infoData.className = "mono";
+        infoData.textContent = `${res.horario} - ${res.data}`;
+        
+        metaDiv.appendChild(infoUsuarios);
+        metaDiv.appendChild(infoData);
+        
+        // 3. Criar o corpo da mensagem
+        const conteudoMensagem = document.createElement('p');
+        conteudoMensagem.className = "text-slate-200 text-sm leading-relaxed";
+        conteudoMensagem.textContent = res.conteudo;
+        
+        // 4. Montar a estrutura
+        msgDiv.appendChild(metaDiv);
+        msgDiv.appendChild(conteudoMensagem);
+        
+        // 5. Adicionar ao Log principal
         log.appendChild(msgDiv);
     });
 }
