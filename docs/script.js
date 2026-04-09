@@ -1,8 +1,8 @@
-/**
+/***************************************************************************************
  * Objetivo: Integração Completa do Front-end (Usuários, Contatos e Mensagens)
  * Data: 09/04/2026
  * Autor: Jean Costa
- */
+ **************************************************************************************/
 
 const API_BASE_URL = 'https://sistema-de-conversas-app.onrender.com/v1/whatsapp/dados'
 
