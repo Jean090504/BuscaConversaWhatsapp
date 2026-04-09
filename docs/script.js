@@ -189,34 +189,30 @@ function renderizarMensagens(mensagens) {
 
     mensagens.forEach(m => {
         const msgDiv = document.createElement('div');
-        const souEu = m.remetente === m.usuario;
-        
-        // Estilo de balão de chat moderno
-        msgDiv.className = "max-w-[85%] p-3 rounded-2xl shadow-sm text-sm " + 
-                          (souEu ? "bg-indigo-600 text-white ml-auto rounded-tr-none" : "bg-white text-slate-700 mr-auto rounded-tl-none border border-slate-200");
+        msgDiv.className = "p-4 rounded-xl border-l-4 transition-all hover:bg-slate-800/40 " + 
+                          (m.remetente === "me" ? "border-indigo-500 bg-indigo-500/5" : "border-slate-600 bg-slate-800/20");
         
         const meta = document.createElement('div');
-        meta.className = "flex justify-between items-center mb-1 text-[9px] font-bold uppercase tracking-wider opacity-70";
+        meta.className = "flex justify-between items-center mb-2 opacity-60 uppercase font-bold text-[9px] tracking-widest";
         
         const sender = document.createElement('span');
-        sender.textContent = m.remetente;
+        // Use textContent para segurança contra XSS
+        sender.textContent = `DE: ${m.remetente || 'SISTEMA'}`; 
 
         const time = document.createElement('span');
-        time.textContent = m.horarioDoEnvio;
+        time.textContent = m.horarioDoEnvio || m.horarioEnvio || '--:--';
+
+        const content = document.createElement('p');
+        content.className = "text-slate-200 text-sm leading-relaxed";
+        content.textContent = m.mensagensTrocadas || m.mensagem || "Erro ao carregar conteúdo.";
 
         meta.appendChild(sender);
         meta.appendChild(time);
-
-        const content = document.createElement('p');
-        content.className = "leading-relaxed";
-        content.textContent = m.mensagensTrocadas;
-
         msgDiv.appendChild(meta);
         msgDiv.appendChild(content);
         log.appendChild(msgDiv);
     });
 }
-
 function renderizarMensagensBusca(resultados) {
     const log = document.getElementById('log-mensagens');
     log.textContent = ""; 
