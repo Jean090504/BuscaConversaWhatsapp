@@ -120,28 +120,39 @@ function renderizarContatos(contatos) {
     });
 }
 
+function fecharDetalhes() {
+    const container = document.getElementById('detalhes-container');
+    container.classList.add('animate__fadeOut');
+    setTimeout(() => {
+        container.classList.add('hidden');
+        container.classList.remove('animate__fadeOut');
+        // Opcional: Voltar o scroll para a tabela
+        document.querySelector('main').scrollIntoView({ behavior: 'smooth' });
+    }, 500);
+}
+
 function renderizarMensagens(mensagens) {
     const log = document.getElementById('log-mensagens');
     log.textContent = ""; 
 
     mensagens.forEach(m => {
         const msgDiv = document.createElement('div');
-        msgDiv.className = "p-3 rounded mb-2 text-[11px] border-l-4 " + 
-                          (m.remetente === m.usuario ? "border-indigo-500 bg-indigo-500/10" : "border-slate-600 bg-slate-800/40");
+        msgDiv.className = "p-4 rounded-xl border-l-4 transition-all hover:bg-slate-800/40 " + 
+                          (m.remetente === m.usuario ? "border-indigo-500 bg-indigo-500/5" : "border-slate-600 bg-slate-800/20");
         
         const meta = document.createElement('div');
-        meta.className = "flex justify-between mb-1 opacity-70";
+        meta.className = "flex justify-between items-center mb-2 opacity-60 uppercase font-bold text-[9px] tracking-widest";
         
         const sender = document.createElement('span');
-        sender.className = "font-black uppercase tracking-tighter text-indigo-400";
+        sender.className = m.remetente === m.usuario ? "text-indigo-400" : "text-slate-400";
         sender.textContent = m.remetente;
 
         const time = document.createElement('span');
-        time.className = "text-slate-500 mono";
+        time.className = "mono";
         time.textContent = m.horarioDoEnvio;
 
         const content = document.createElement('p');
-        content.className = "text-slate-200 leading-relaxed";
+        content.className = "text-slate-200 text-sm leading-relaxed";
         content.textContent = m.mensagensTrocadas;
 
         meta.appendChild(sender);
@@ -151,6 +162,7 @@ function renderizarMensagens(mensagens) {
         log.appendChild(msgDiv);
     });
 }
+
 
 function exibirErroTabela() {
     const tbody = document.getElementById('corpo-tabela');
