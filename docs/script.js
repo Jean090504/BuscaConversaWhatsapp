@@ -6,8 +6,6 @@
 
 const API_BASE_URL = 'https://sistema-de-conversas-app.onrender.com/v1/whatsapp';
 
-const response = await fetch(`${API_BASE_URL}/dados`);
-
 async function inicializarDashboard() {
     try {
         const response = await fetch(`${API_BASE_URL}/dados`);
