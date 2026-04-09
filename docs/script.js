@@ -4,7 +4,7 @@
  * Autor: Jean Costa
  */
 
-const API_BASE_URL = 'https://sistema-de-conversas-app.onrender.com/v1/whatsapp';
+const API_BASE_URL = 'https://sistema-de-conversas-app.onrender.com/v1/whatsapp/dados'
 
 // --- 1. CARREGAMENTO INICIAL DO DASHBOARD ---
 async function inicializarDashboard() {
