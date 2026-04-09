@@ -10,11 +10,5 @@ const app = require('./src/app');
 const PORT = process.env.PORT || 3000
 
 app.listen(PORT, () => {
-    console.log(`
-    ====================================================
-    🚀 SERVIDOR ONLINE!
-    📡 URL Local: https://simulando-app-de-mensagens.onrender.com/
-    🛠️  Status: Operacional
-    ====================================================
-    `)
+    console.log(`🚀 Servidor rodando na porta ${PORT}`)
 })
