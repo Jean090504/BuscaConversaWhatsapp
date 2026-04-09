@@ -35,8 +35,8 @@
         </div>
     </aside>
 
-    <main class="flex-1 flex flex-col">
-        <header class="h-16 bg-[#1e293b]/50 backdrop-blur-md border-b border-slate-700 flex items-center justify-between px-8">
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <header class="h-16 bg-[#1e293b]/50 backdrop-blur-md border-b border-slate-700 flex items-center justify-between px-8 shrink-0">
             <h2 class="text-white font-semibold">Visualização de Dados em Tempo Real</h2>
             <div class="flex items-center gap-6">
                 <div class="relative hidden md:block">
@@ -44,84 +44,72 @@
                     <input type="text" id="input-busca-global" placeholder="Procurar palavra-chave..." 
                         class="bg-slate-900/50 border border-slate-700 rounded-lg pl-9 pr-4 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500 transition-all w-64">
                 </div>
-                <span class="flex items-center gap-2 text-xs text-green-400 bg-green-400/10 px-3 py-1 rounded-full border border-green-400/20">
-                    <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                    API Online
-                </span>
+                <span class="text-xs text-green-400 bg-green-400/10 px-3 py-1 rounded-full border border-green-400/20">API Online</span>
             </div>
         </header>
 
-        <div class="lg:col-span-8 bg-[#1e293b] rounded-xl border border-slate-700 p-6 flex flex-col h-[600px] shadow-2xl">
-            <div class="flex justify-between items-center mb-6 border-b border-slate-700 pb-3">
-                <h3 class="text-white font-bold flex items-center gap-2 text-sm uppercase tracking-widest">
-                    <i class="fas fa-comments text-indigo-400"></i> Fluxo de Conversa
-                </h3>
-                <span id="status-conversa" class="text-[10px] text-slate-500 italic">Selecione um contato para filtrar</span>
-            </div>
-            <div id="log-mensagens" class="flex-1 space-y-4 overflow-y-auto pr-2 custom-scrollbar scroll-smooth">
-                </div>
-        </div>
-
-        <div class="p-8 overflow-y-auto space-y-6">
+        <div class="flex-1 overflow-y-auto p-4 sm:p-8 space-y-6 relative">
             
-            <div class="grid grid-cols-3 gap-6">
-                <div class="bg-[#1e293b] p-6 rounded-xl border border-slate-700">
-                    <p class="text-slate-500 text-sm">Total de Registros</p>
-                    <h3 id="total-contatos" class="text-3xl font-bold text-white mt-1">--</h3>
-                </div>
-                <div class="bg-[#1e293b] p-6 rounded-xl border border-slate-700">
-                    <p class="text-slate-500 text-sm">Última Consulta</p>
-                    <h3 class="text-3xl font-bold text-white mt-1">Hoje</h3>
-                </div>
-            </div>
-
-            <div class="bg-[#1e293b] rounded-xl border border-slate-700 overflow-hidden">
-                <table class="w-full text-left">
-                    <thead class="bg-slate-800 text-slate-400 text-xs uppercase">
-                        <tr>
-                            <th class="px-6 py-4">Usuário / Nickname</th>
-                            <th class="px-6 py-4">Status / Bio</th>
-                            <th class="px-6 py-4">Ação</th>
-                        </tr>
-                    </thead>
-                    <tbody id="corpo-tabela" class="divide-y divide-slate-700 text-sm">
-                        </tbody>
-                </table>
-            </div>
-        </div>
-
-       <div id="detalhes-container" class="hidden animate__animated animate__fadeIn space-y-6 mt-8">
-    
-            <div class="flex justify-between items-center bg-[#1e293b] p-4 rounded-xl border border-slate-700 shadow-lg">
-                <div class="flex items-center gap-4">
-                    <div id="user-detail-icon" class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold">
-                        </div>
-                    <div>
-                        <h3 id="user-detail-name" class="text-white font-bold leading-none uppercase tracking-tighter">Console de Operações</h3>
-                        <p class="text-[10px] text-slate-500 mt-1 uppercase">Monitoramento de Fluxo Ativo</p>
+            <div id="view-tabela" class="space-y-6 transition-all duration-500">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-[#1e293b] p-6 rounded-xl border border-slate-700 shadow-lg">
+                        <p class="text-slate-500 text-xs uppercase font-bold tracking-widest">Total de Usuários</p>
+                        <h3 id="total-contatos" class="text-3xl font-black text-white mt-2">--</h3>
+                    </div>
+                    <div class="bg-[#1e293b] p-6 rounded-xl border border-slate-700 shadow-lg">
+                        <p class="text-slate-500 text-xs uppercase font-bold tracking-widest">Status do Nó</p>
+                        <h3 class="text-3xl font-black text-green-500 mt-2">Ativo</h3>
                     </div>
                 </div>
-                <button onclick="fecharDetalhes()" class="p-2 hover:bg-red-500/10 hover:text-red-500 rounded-lg transition-all group">
-                    <i class="fas fa-times group-hover:rotate-90 transition-transform"></i>
-                </button>
+
+                <div class="bg-[#1e293b] rounded-xl border border-slate-700 overflow-hidden shadow-2xl">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-slate-800/50 text-slate-400 text-[10px] uppercase tracking-[0.2em] font-black">
+                                <tr>
+                                    <th class="px-6 py-4">Operador / ID</th>
+                                    <th class="px-6 py-4">Bio / Descrição</th>
+                                    <th class="px-6 py-4 text-center">Ações de Monitoramento</th>
+                                </tr>
+                            </thead>
+                            <tbody id="corpo-tabela" class="divide-y divide-slate-700/50 text-sm">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-[500px]">
-                <div class="lg:col-span-4 bg-[#1e293b] rounded-xl border border-slate-700 p-6 flex flex-col h-full">
-                    <h3 class="text-white font-bold mb-6 flex items-center gap-2 text-sm uppercase tracking-widest border-b border-slate-700 pb-3">
-                        <i class="fas fa-address-book text-indigo-400"></i> Contatos
-                    </h3>
-                    <ul id="lista-contatos-detalhe" class="space-y-3 overflow-y-auto flex-1 custom-scrollbar"></ul>
-                </div>
-
-                <div class="lg:col-span-8 bg-[#1e293b] rounded-xl border border-slate-700 p-6 flex flex-col h-full">
-                    <h3 class="text-white font-bold mb-6 flex items-center gap-2 text-sm uppercase tracking-widest border-b border-slate-700 pb-3">
-                        <i class="fas fa-history text-indigo-400"></i> Histórico de Mensagens
-                    </h3>
-                    <div id="log-mensagens" class="flex-1 space-y-4 overflow-y-auto pr-2 custom-scrollbar">
+            <div id="detalhes-container" class="hidden absolute inset-0 bg-[#0f172a] z-20 p-4 sm:p-8 flex flex-col space-y-6 animate__animated animate__fadeIn">
+                <div class="flex justify-between items-center bg-[#1e293b] p-4 rounded-xl border border-slate-700">
+                    <div class="flex items-center gap-4">
+                        <div id="user-avatar-current" class="w-12 h-12 rounded-full border-2 border-indigo-500 overflow-hidden bg-slate-800"></div>
+                        <div>
+                            <h3 id="user-detail-name" class="text-white font-black uppercase tracking-tighter text-lg leading-none">Console</h3>
+                            <span id="user-detail-number" class="text-[10px] text-slate-500 mono font-bold">--</span>
                         </div>
+                    </div>
+                    <button onclick="fecharDetalhes()" class="px-4 py-2 bg-slate-800 hover:bg-red-500/20 hover:text-red-500 text-slate-400 rounded-lg transition-all text-xs font-bold uppercase tracking-widest border border-slate-700">
+                        <i class="fas fa-arrow-left mr-2"></i> Voltar ao Dashboard
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 min-h-0">
+                    <div class="lg:col-span-4 bg-[#1e293b] rounded-xl border border-slate-700 p-6 flex flex-col min-h-0 shadow-xl">
+                        <h4 class="text-indigo-400 text-[10px] font-black uppercase tracking-[0.3em] mb-4">Network_Links</h4>
+                        <ul id="lista-contatos-detalhe" class="flex-1 overflow-y-auto space-y-2 pr-2 custom-scrollbar"></ul>
+                    </div>
+
+                    <div class="lg:col-span-8 bg-[#1e293b] rounded-xl border border-slate-700 p-6 flex flex-col min-h-0 shadow-xl">
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="text-indigo-400 text-[10px] font-black uppercase tracking-[0.3em]">Data_Stream_Logs</h4>
+                            <span id="status-conversa" class="text-[9px] text-slate-600 italic">IDLE</span>
+                        </div>
+                        <div id="log-mensagens" class="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar scroll-smooth bg-slate-900/30 rounded-lg p-4 border border-slate-800/50">
+                            </div>
+                    </div>
                 </div>
             </div>
+
         </div>
     </main>
 

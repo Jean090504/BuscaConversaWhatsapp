@@ -68,26 +68,32 @@ function renderizarTabela(usuarios) {
     });
 }
 
+// Função para abrir detalhes sem quebrar o layout
 async function verDetalhesUsuario(numero) {
-    const container = document.getElementById('detalhes-container');
-    if (container) container.classList.remove('hidden'); 
+    const viewTabela = document.getElementById('view-tabela');
+    const containerDetalhes = document.getElementById('detalhes-container');
 
+    // Transição visual
+    viewTabela.classList.add('opacity-0', 'pointer-events-none');
+    
     try {
+        // Busca de dados (mantendo sua lógica de 09/04/2026)
         const resContatos = await fetch(`${API_BASE_URL}/usuario/contatos?numero=${numero}`);
         const resultContatos = await resContatos.json();
-        if (resultContatos.status === true && resultContatos.dadosContatos) {
-            renderizarContatos(resultContatos.dadosContatos.dadosUsuario || []);
-        }
-
-        const resMensagens = await fetch(`${API_BASE_URL}/usuario/conversas?numero=${numero}`);
-        const resultMensagens = await resMensagens.json();
-        if (resultMensagens.status === true && resultMensagens.dadosConversas) {
-            renderizarMensagens(resultMensagens.dadosConversas.mensagensUsuario || []);
-        }
         
-        container.scrollIntoView({ behavior: 'smooth' });
+        if (resultContatos.status) {
+            // Preenche o cabeçalho com os dados do dono
+            document.getElementById('user-detail-name').textContent = resultContatos.dadosContatos.dadosUsuario[0].usuario;
+            document.getElementById('user-detail-number').textContent = `NODE_REF: ${numero}`;
+            
+            renderizarContatos(resultContatos.dadosContatos.dadosUsuario, numero);
+            
+            // Abre o container
+            containerDetalhes.classList.remove('hidden');
+            containerDetalhes.classList.add('flex'); // Garante que o grid flexível funcione
+        }
     } catch (error) {
-        console.error("Erro ao carregar detalhes:", error);
+        console.error("Erro ao processar requisição:", error);
     }
 }
 
@@ -155,15 +161,19 @@ function renderizarContatos(contatos, numeroDono) {
     });
 }
 
+
+
+// Função para fechar e restaurar o Dashboard
 function fecharDetalhes() {
-    const container = document.getElementById('detalhes-container');
-    container.classList.add('animate__fadeOut');
+    const viewTabela = document.getElementById('view-tabela');
+    const containerDetalhes = document.getElementById('detalhes-container');
+
+    containerDetalhes.classList.add('animate__fadeOut');
     setTimeout(() => {
-        container.classList.add('hidden');
-        container.classList.remove('animate__fadeOut');
-        // Opcional: Voltar o scroll para a tabela
-        document.querySelector('main').scrollIntoView({ behavior: 'smooth' });
-    }, 500);
+        containerDetalhes.classList.add('hidden');
+        containerDetalhes.classList.remove('animate__fadeOut', 'flex');
+        viewTabela.classList.remove('opacity-0', 'pointer-events-none');
+    }, 400);
 }
 
 function renderizarMensagens(mensagens) {
