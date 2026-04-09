@@ -11,17 +11,18 @@ async function inicializarDashboard() {
         const response = await fetch(`${API_BASE_URL}/dados`);
         const result = await response.json();
 
-        if (result.status && result.dadosUsuario) {
-            const users = result.dadosUsuario; 
+        // AJUSTE AQUI: Acessando o caminho correto do seu JSON
+        if (result.status && result.dados && result.dados.dadosUsuario) {
+            const users = result.dados.dadosUsuario; // Agora pegamos o array real
             
             const totalEl = document.getElementById('total-contatos');
-
-            if (totalEl && Array.isArray(users)) {
+            if (totalEl) {
                 totalEl.textContent = users.length;
-                renderizarTabela(users);
-            } else {
-                console.error("Dica: 'users' não é um array. Verifique o retorno da API.");
             }
+
+            renderizarTabela(users);
+        } else {
+            console.error("Estrutura do JSON não condiz com o esperado:", result);
         }
     } catch (error) {
         console.error("Erro ao conectar com a API:", error);
