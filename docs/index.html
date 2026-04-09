@@ -38,13 +38,29 @@
     <main class="flex-1 flex flex-col">
         <header class="h-16 bg-[#1e293b]/50 backdrop-blur-md border-b border-slate-700 flex items-center justify-between px-8">
             <h2 class="text-white font-semibold">Visualização de Dados em Tempo Real</h2>
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-6">
+                <div class="relative hidden md:block">
+                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
+                    <input type="text" id="input-busca-global" placeholder="Procurar palavra-chave..." 
+                        class="bg-slate-900/50 border border-slate-700 rounded-lg pl-9 pr-4 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500 transition-all w-64">
+                </div>
                 <span class="flex items-center gap-2 text-xs text-green-400 bg-green-400/10 px-3 py-1 rounded-full border border-green-400/20">
                     <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                    API Online (Render)
+                    API Online
                 </span>
             </div>
         </header>
+
+        <div class="lg:col-span-8 bg-[#1e293b] rounded-xl border border-slate-700 p-6 flex flex-col h-[600px] shadow-2xl">
+            <div class="flex justify-between items-center mb-6 border-b border-slate-700 pb-3">
+                <h3 class="text-white font-bold flex items-center gap-2 text-sm uppercase tracking-widest">
+                    <i class="fas fa-comments text-indigo-400"></i> Fluxo de Conversa
+                </h3>
+                <span id="status-conversa" class="text-[10px] text-slate-500 italic">Selecione um contato para filtrar</span>
+            </div>
+            <div id="log-mensagens" class="flex-1 space-y-4 overflow-y-auto pr-2 custom-scrollbar scroll-smooth">
+                </div>
+        </div>
 
         <div class="p-8 overflow-y-auto space-y-6">
             

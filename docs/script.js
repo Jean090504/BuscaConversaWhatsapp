@@ -91,31 +91,66 @@ async function verDetalhesUsuario(numero) {
     }
 }
 
-function renderizarContatos(contatos) {
+// --- 5. BUSCA POR PALAVRA-CHAVE (ENDPOINT 19) ---
+const inputBusca = document.getElementById('input-busca-global');
+inputBusca?.addEventListener('keypress', async (e) => {
+    if (e.key === 'Enter') {
+        const termo = inputBusca.value;
+        const container = document.getElementById('detalhes-container');
+        container.classList.remove('hidden');
+        
+        try {
+            const res = await fetch(`${API_BASE_URL}/usuario/busca?busca=${termo}`);
+            const result = await res.json();
+            
+            if (result.status) {
+                renderizarMensagensBusca(result.dadosBusca.resultados);
+                document.getElementById('user-detail-name').textContent = `Resultados para: "${termo}"`;
+            }
+        } catch (error) {
+            console.error("Erro na busca:", error);
+        }
+    }
+});
+
+// --- 6. FILTRO DE CONVERSA DIRETA (ENDPOINT 15) ---
+async function carregarConversaDireta(numeroUsuario, nomeContato) {
+    const statusTxt = document.getElementById('status-conversa');
+    if (statusTxt) statusTxt.textContent = `Filtrando conversa com: ${nomeContato}`;
+
+    try {
+        const res = await fetch(`${API_BASE_URL}/usuario/conversa/direta?numero=${numeroUsuario}&contato=${nomeContato}`);
+        const result = await res.json();
+        
+        if (result.status && result.dadosConversaDireta) {
+            renderizarMensagens(result.dadosConversaDireta.mensagensUsuario);
+        }
+    } catch (error) {
+        console.error("Erro ao filtrar conversa:", error);
+    }
+}
+
+// Atualize sua função renderizarContatos para tornar os itens clicáveis
+function renderizarContatos(contatos, numeroDono) {
     const lista = document.getElementById('lista-contatos-detalhe');
     lista.textContent = ""; 
 
     contatos.forEach(c => {
         const li = document.createElement('li');
-        li.className = "flex items-center gap-3 p-3 bg-slate-800/30 rounded-lg border border-slate-700/50 mb-2";
+        // Cursor pointer e hover para indicar que é clicável
+        li.className = "flex items-center gap-3 p-3 bg-slate-800/30 rounded-lg border border-slate-700/50 mb-2 cursor-pointer hover:bg-indigo-500/10 hover:border-indigo-500/50 transition-all group";
         
-        const img = document.createElement('img');
-        img.src = c.imagemContato;
-        img.className = "w-10 h-10 rounded-full object-cover border border-slate-600";
-        
-        const info = document.createElement('div');
-        const name = document.createElement('p');
-        name.className = "text-xs text-white font-bold";
-        name.textContent = c.nomeContato;
-        
-        const bio = document.createElement('p');
-        bio.className = "text-[10px] text-slate-500 leading-tight";
-        bio.textContent = c.bioContato;
+        // Ao clicar, puxa a conversa direta (Endpoint 15)
+        li.onclick = () => carregarConversaDireta(numeroDono, c.nomeContato);
 
-        info.appendChild(name);
-        info.appendChild(bio);
-        li.appendChild(img);
-        li.appendChild(info);
+        li.innerHTML = `
+            <img src="${c.imagemContato}" class="w-10 h-10 rounded-full object-cover border border-slate-600 group-hover:border-indigo-500 transition-all">
+            <div class="flex-1">
+                <p class="text-xs text-white font-bold group-hover:text-indigo-400 transition-all">${c.nomeContato}</p>
+                <p class="text-[10px] text-slate-500 leading-tight truncate w-32">${c.bioContato}</p>
+            </div>
+            <i class="fas fa-chevron-right text-[10px] text-slate-700 group-hover:text-indigo-500 transition-all"></i>
+        `;
         lista.appendChild(li);
     });
 }
