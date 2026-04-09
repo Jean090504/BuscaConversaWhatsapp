@@ -11,19 +11,18 @@ async function inicializarDashboard() {
         const response = await fetch(`${API_BASE_URL}/dados`);
         const result = await response.json();
 
-        // AJUSTE CRÍTICO: Mapeando conforme o seu JSON do Render
-        if (result.status && result.dados && result.dados.dadosUsuario) {
+        // AJUSTE: Suas rotas retornam "status" como string e os dados dentro de "dados"
+        // E dentro de "dados", existe a chave "dadosUsuario"
+        if (result.status === "true" && result.dados && result.dados.dadosUsuario) {
             const users = result.dados.dadosUsuario; 
             
             const totalEl = document.getElementById('total-contatos');
             if (totalEl) totalEl.textContent = users.length;
 
             renderizarTabela(users);
-        } else {
-            console.error("Estrutura do JSON não condiz com o esperado. Verifique o console.");
         }
     } catch (error) {
-        console.error("Erro ao conectar com a API:", error);
+        console.error("Erro na carga inicial:", error);
         exibirErroTabela();
     }
 }
@@ -74,16 +73,17 @@ async function verDetalhesUsuario(numero) {
     if (container) container.classList.remove('hidden'); 
 
     try {
-        // AJUSTE: Seguindo a hierarquia de 'dados' também para detalhes
         const resContatos = await fetch(`${API_BASE_URL}/usuario/contatos?numero=${numero}`);
         const resultContatos = await resContatos.json();
-        const listaContatos = resultContatos.dados ? resultContatos.dados.dadosUsuario : [];
-        renderizarContatos(listaContatos);
+        if (resultContatos.status === true && resultContatos.dadosContatos) {
+            renderizarContatos(resultContatos.dadosContatos.dadosUsuario || []);
+        }
 
         const resMensagens = await fetch(`${API_BASE_URL}/usuario/conversas?numero=${numero}`);
         const resultMensagens = await resMensagens.json();
-        const listaMensagens = resultMensagens.dados ? resultMensagens.dados.mensagensUsuario : [];
-        renderizarMensagens(listaMensagens);
+        if (resultMensagens.status === true && resultMensagens.dadosConversas) {
+            renderizarMensagens(resultMensagens.dadosConversas.mensagensUsuario || []);
+        }
         
         container.scrollIntoView({ behavior: 'smooth' });
     } catch (error) {
