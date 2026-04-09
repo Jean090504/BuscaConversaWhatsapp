@@ -13,7 +13,7 @@ app.listen(PORT, () => {
     console.log(`
     ====================================================
     🚀 SERVIDOR ONLINE!
-    📡 URL Local: http://localhost:${PORT}
+    📡 URL Local: https://simulando-app-de-mensagens.onrender.com/
     🛠️  Status: Operacional
     ====================================================
     `)
