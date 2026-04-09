@@ -11,18 +11,16 @@ async function inicializarDashboard() {
         const response = await fetch(`${API_BASE_URL}/dados`);
         const result = await response.json();
 
-        // AJUSTE AQUI: Acessando o caminho correto do seu JSON
+        // AJUSTE CRÍTICO: Mapeando conforme o seu JSON do Render
         if (result.status && result.dados && result.dados.dadosUsuario) {
-            const users = result.dados.dadosUsuario; // Agora pegamos o array real
+            const users = result.dados.dadosUsuario; 
             
             const totalEl = document.getElementById('total-contatos');
-            if (totalEl) {
-                totalEl.textContent = users.length;
-            }
+            if (totalEl) totalEl.textContent = users.length;
 
             renderizarTabela(users);
         } else {
-            console.error("Estrutura do JSON não condiz com o esperado:", result);
+            console.error("Estrutura do JSON não condiz com o esperado. Verifique o console.");
         }
     } catch (error) {
         console.error("Erro ao conectar com a API:", error);
@@ -30,7 +28,6 @@ async function inicializarDashboard() {
     }
 }
 
-// --- 2. RENDERIZAÇÃO DA TABELA DE OPERAÇÕES ---
 function renderizarTabela(usuarios) {
     const tbody = document.getElementById('corpo-tabela');
     tbody.textContent = ""; 
@@ -39,30 +36,29 @@ function renderizarTabela(usuarios) {
         const tr = document.createElement('tr');
         tr.className = "hover:bg-slate-800/50 transition border-b border-slate-700/50";
 
-        // Usuário
         const tdUser = document.createElement('td');
         tdUser.className = "px-6 py-4 flex items-center gap-3 text-white";
+        
         const img = document.createElement('img');
-        img.src = user["profile-image"];
+        // Usamos profile-image conforme sua API
+        img.src = user["profile-image"]; 
         img.className = "w-8 h-8 rounded-full bg-slate-700 border border-slate-600 object-cover";
+        
         const spanName = document.createElement('span');
         spanName.textContent = user.nickname;
+        
         tdUser.appendChild(img);
         tdUser.appendChild(spanName);
 
-        // Bio/Status
         const tdBio = document.createElement('td');
         tdBio.className = "px-6 py-4 italic text-slate-400";
         tdBio.textContent = user.background || "Sem descrição.";
 
-        // Ação: Botão que dispara os detalhes
         const tdAction = document.createElement('td');
         tdAction.className = "px-6 py-4";
         const btn = document.createElement('button');
         btn.className = "text-indigo-400 hover:text-indigo-300 font-medium transition-colors";
         btn.textContent = "Ver Detalhes";
-        
-        // CORREÇÃO: Chama a função usando o número do usuário
         btn.onclick = () => verDetalhesUsuario(user.number);
 
         tdAction.appendChild(btn);
@@ -73,31 +69,28 @@ function renderizarTabela(usuarios) {
     });
 }
 
-// --- 3. BUSCA DE DETALHES (CONTATOS E MENSAGENS) ---
 async function verDetalhesUsuario(numero) {
     const container = document.getElementById('detalhes-container');
     if (container) container.classList.remove('hidden'); 
 
     try {
-        // Busca Contatos do Usuário selecionado
+        // AJUSTE: Seguindo a hierarquia de 'dados' também para detalhes
         const resContatos = await fetch(`${API_BASE_URL}/usuario/contatos?numero=${numero}`);
-        const dataContatos = await resContatos.json();
-        renderizarContatos(dataContatos.dadosUsuario || []);
+        const resultContatos = await resContatos.json();
+        const listaContatos = resultContatos.dados ? resultContatos.dados.dadosUsuario : [];
+        renderizarContatos(listaContatos);
 
-        // Busca Histórico de Mensagens
         const resMensagens = await fetch(`${API_BASE_URL}/usuario/conversas?numero=${numero}`);
-        const dataMensagens = await resMensagens.json();
-        renderizarMensagens(dataMensagens.mensagensUsuario || []);
+        const resultMensagens = await resMensagens.json();
+        const listaMensagens = resultMensagens.dados ? resultMensagens.dados.mensagensUsuario : [];
+        renderizarMensagens(listaMensagens);
         
-        // Scroll suave para a área de detalhes
         container.scrollIntoView({ behavior: 'smooth' });
-        
     } catch (error) {
         console.error("Erro ao carregar detalhes:", error);
     }
 }
 
-// --- 4. AUXILIARES DE RENDERIZAÇÃO SEGURA ---
 function renderizarContatos(contatos) {
     const lista = document.getElementById('lista-contatos-detalhe');
     lista.textContent = ""; 
