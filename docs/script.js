@@ -148,34 +148,39 @@ function renderizarMensagens(mensagens) {
 
     if (!mensagens || mensagens.length === 0) {
         const empty = document.createElement('div');
-        empty.className = "text-center py-20 text-slate-600 mono text-xs uppercase tracking-widest";
-        empty.textContent = "NENHUM_LOG_ENCONTRADO";
+        empty.className = "text-center py-20 text-slate-400 font-medium italic";
+        empty.textContent = "Nenhum log de conversa disponível.";
         log.appendChild(empty);
         return;
     }
 
     mensagens.forEach(m => {
         const remetente = m.remetente || m.usuarioDono || m.usuarioRemetente || "SISTEMA";
-        const texto = m.mensagem || m.mensagensTrocadas || m.conteudo || "Vazio";
+        const texto = m.mensagem || m.mensagensTrocadas || m.conteudo || "...";
         const horario = m.horarioEnvio || m.horarioDoEnvio || m.horario || "00:00";
+        
+        // Identifica se a mensagem é sua (Jean/Me) para alinhar e colorir
         const isMe = remetente.toLowerCase() === "me" || remetente.includes("Costa");
 
         const msgDiv = document.createElement('div');
-        msgDiv.className = `p-4 rounded-2xl border-l-4 transition-all mb-4 ${isMe ? 'border-purple-500 bg-purple-500/5' : 'border-blue-500 bg-blue-500/5'}`;
+        // Usamos fundos sólidos e bordas coloridas para parar de parecer "apagado"
+        msgDiv.className = `p-4 rounded-2xl border-l-4 shadow-sm msg-bubble mb-4 ${
+            isMe ? 'bg-indigo-50 border-indigo-500 ml-8' : 'bg-white border-slate-300 mr-8'
+        }`;
         
         const meta = document.createElement('div');
-        meta.className = "flex justify-between items-center mb-1 opacity-50 font-black text-[9px] tracking-widest uppercase";
+        meta.className = "flex justify-between items-center mb-2 border-b border-black/5 pb-1";
         
         const senderSpan = document.createElement('span');
-        senderSpan.className = isMe ? 'text-purple-400' : 'text-blue-400';
-        senderSpan.textContent = remetente;
+        senderSpan.className = `sender-name text-[10px] uppercase ${isMe ? 'text-indigo-600' : 'text-slate-500'}`;
+        senderSpan.textContent = isMe ? "VOCÊ (SISTEMA)" : remetente;
         
         const timeSpan = document.createElement('span');
-        timeSpan.className = "mono";
+        timeSpan.className = "text-[10px] font-bold text-slate-400 font-mono";
         timeSpan.textContent = horario;
 
         const contentP = document.createElement('p');
-        contentP.className = "text-slate-200 text-sm leading-relaxed";
+        contentP.className = "text-content font-medium";
         contentP.textContent = texto;
 
         meta.appendChild(senderSpan);
