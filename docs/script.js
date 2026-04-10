@@ -48,7 +48,7 @@ function renderizarTabela(usuarios) {
 
         // Coluna Operador
         const tdUser = document.createElement('td');
-        tdUser.className = "px-8 py-5 flex items-center gap-4 text-white font-medium";
+        tdUser.className = "px-8 py-5 flex items-center gap-4 text-black font-medium";
         
         const avatarContainer = document.createElement('div');
         avatarContainer.className = "relative";
@@ -85,7 +85,7 @@ function renderizarTabela(usuarios) {
         const tdAction = document.createElement('td');
         tdAction.className = "px-8 py-5 text-right";
         const btn = document.createElement('button');
-        btn.className = "px-5 py-2 bg-purple-600/10 text-purple-400 hover:bg-purple-600 hover:text-white rounded-lg text-[10px] font-black uppercase tracking-widest transition-all border border-purple-500/20";
+        btn.className = "px-5 py-2 bg-purple-600/10 text-purple-400 hover:bg-purple-600 hover:text-black rounded-lg text-[10px] font-black uppercase tracking-widest transition-all border border-purple-500/20";
         btn.textContent = "Monitorar";
         btn.onclick = () => verDetalhesUsuario(user.number);
         tdAction.appendChild(btn);
@@ -219,7 +219,7 @@ function renderizarContatos(contatos, numeroDono) {
         const textContainer = document.createElement('div');
         textContainer.className = "flex-1 overflow-hidden";
         const nome = document.createElement('p');
-        nome.className = "text-xs text-white font-bold truncate";
+        nome.className = "text-xs text-black font-bold truncate";
         nome.textContent = c.nomeContato;
         const bio = document.createElement('p');
         bio.className = "text-[10px] text-slate-500 truncate";
